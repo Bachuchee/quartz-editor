@@ -39,6 +39,8 @@ dependencies:
   riverpod: ^2.3.2
   flutter_animate: ^4.1.1+1
   flutter_signin_button: ^2.0.0
+  rich_text_controller: ^1.4.2
+  ffi: ^2.0.1
 
 dev_dependencies:
   flutter_test:
