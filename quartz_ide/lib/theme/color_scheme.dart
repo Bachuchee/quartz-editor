@@ -64,5 +64,7 @@ const darkColorScheme = ColorScheme(
   onSurfaceVariant: Color(0xFFC8C5D0),
 );
 
-const varKeywordColor = const Color(0xFFFA61A3);
-const functionColor = const Color(0xFF99FFD6);
+const varKeywordColor = Color(0xFFFA61A3);
+const functionColor = Color(0xFF99FFD6);
+const otherKeywordColor = Color(0xFF00FFA0);
+const literalColor = Color(0xFFFE99FF);
