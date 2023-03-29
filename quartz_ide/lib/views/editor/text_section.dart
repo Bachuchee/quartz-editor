@@ -52,6 +52,7 @@ class _TextSectionState extends State<TextSection> {
   late RichTextController _controller;
   String _lastText = "";
   int _lineAmount = 1;
+  int _curLine = 0;
 
   @override
   void initState() {
@@ -132,6 +133,7 @@ class _TextSectionState extends State<TextSection> {
         ),
       },
     );
+    _controller.addListener(onChange);
   }
 
   @override
@@ -140,7 +142,65 @@ class _TextSectionState extends State<TextSection> {
     super.dispose();
   }
 
-  void onChange(String text) {}
+  void onChange() {
+    int position = _controller.selection.baseOffset;
+    try {
+      String firstPart = _controller.text.substring(0, position);
+      String secondPart = _controller.text.substring(position);
+      String lastChar = _controller.text[position - 1];
+      if (_controller.text.length > _lastText.length ||
+          _controller.text.isEmpty) {
+        switch (lastChar) {
+          case "'":
+            _controller.text = "$firstPart'$secondPart";
+            _controller.selection = TextSelection.collapsed(
+              offset: position,
+            );
+            break;
+
+          case '"':
+            _controller.text = '$firstPart"$secondPart';
+            _controller.selection = TextSelection.collapsed(
+              offset: position,
+            );
+            break;
+
+          case "(":
+            _controller.text = "$firstPart)$secondPart";
+            _controller.selection = TextSelection.collapsed(
+              offset: position,
+            );
+            break;
+
+          case "{":
+            _controller.text = "$firstPart}$secondPart";
+            _controller.selection = TextSelection.collapsed(
+              offset: position,
+            );
+            break;
+
+          case "[":
+            _controller.text = "$firstPart]$secondPart";
+            _controller.selection = TextSelection.collapsed(
+              offset: position,
+            );
+            break;
+        }
+      }
+    } catch (e) {}
+    _lastText = _controller.text;
+    int curLine = 0;
+    for (int i = 0; i < _lastText.length; i++) {
+      if (position > i && _lastText[i] == '\n') {
+        curLine++;
+      }
+    }
+
+    setState(() {
+      _lineAmount = _lastText.split('\n').length;
+      _curLine = curLine;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -151,7 +211,7 @@ class _TextSectionState extends State<TextSection> {
           children: [
             Expanded(
               flex: 2,
-              child: TextLines(_lineAmount),
+              child: TextLines(_lineAmount, _curLine),
             ),
             const SizedBox(width: 2.0),
             Expanded(
@@ -173,59 +233,6 @@ class _TextSectionState extends State<TextSection> {
                       fontFamily: 'Sen',
                     ),
                     maxLines: null,
-                    onChanged: (text) {
-                      int position = _controller.selection.baseOffset;
-                      try {
-                        String firstPart =
-                            _controller.text.substring(0, position);
-                        String secondPart =
-                            _controller.text.substring(position);
-                        String lastChar = _controller.text[position - 1];
-                        if (_controller.text.length > _lastText.length ||
-                            _controller.text.isEmpty) {
-                          switch (lastChar) {
-                            case "'":
-                              _controller.text = "$firstPart'$secondPart";
-                              _controller.selection = TextSelection.collapsed(
-                                offset: position,
-                              );
-                              break;
-
-                            case '"':
-                              _controller.text = '$firstPart"$secondPart';
-                              _controller.selection = TextSelection.collapsed(
-                                offset: position,
-                              );
-                              break;
-
-                            case "(":
-                              _controller.text = "$firstPart)$secondPart";
-                              _controller.selection = TextSelection.collapsed(
-                                offset: position,
-                              );
-                              break;
-
-                            case "{":
-                              _controller.text = "$firstPart}$secondPart";
-                              _controller.selection = TextSelection.collapsed(
-                                offset: position,
-                              );
-                              break;
-
-                            case "[":
-                              _controller.text = "$firstPart]$secondPart";
-                              _controller.selection = TextSelection.collapsed(
-                                offset: position,
-                              );
-                              break;
-                          }
-                        }
-                      } catch (e) {}
-                      _lastText = _controller.text;
-                      setState(() {
-                        _lineAmount = _lastText.split('\n').length;
-                      });
-                    },
                   ),
                 ),
               ),

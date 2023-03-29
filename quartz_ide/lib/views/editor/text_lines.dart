@@ -3,9 +3,11 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 
 class TextLines extends StatefulWidget {
-  const TextLines(this.lineAmount, {super.key});
+  const TextLines(this.lineAmount, this.curLine, {super.key});
 
   final int lineAmount;
+
+  final int curLine;
 
   @override
   State<TextLines> createState() => _TextLinesState();
@@ -25,7 +27,10 @@ class _TextLinesState extends State<TextLines> {
             '${curLine + 1}',
             style: TextStyle(
               fontSize: 24.0,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.6),
+              color: Theme.of(context)
+                  .colorScheme
+                  .primary
+                  .withOpacity(widget.curLine == curLine ? 1.0 : 0.6),
             ),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
