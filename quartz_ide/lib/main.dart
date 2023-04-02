@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quartz_ide/theme/color_scheme.dart';
-import 'package:quartz_ide/views/editor/text_section.dart';
+import 'package:quartz_ide/views/editor/editor.dart';
+import 'package:quartz_ide/views/editor/text_section/text_section.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const ProviderScope(child: MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -13,30 +15,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Quartz IDE',
+      title: 'Quartz',
       theme: ThemeData(
         colorScheme: darkColorScheme,
         fontFamily: 'Sen',
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const EditorDemo(),
-    );
-  }
-}
-
-class EditorDemo extends StatefulWidget {
-  const EditorDemo({super.key});
-
-  @override
-  State<EditorDemo> createState() => _EditorDemoState();
-}
-
-class _EditorDemoState extends State<EditorDemo> {
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: TextSection(),
+      home: const Editor(),
     );
   }
 }
