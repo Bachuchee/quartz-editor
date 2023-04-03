@@ -4,7 +4,7 @@ class StorageNode {
 }
 
 class FolderNode extends StorageNode {
-  FolderNode(String name, [this.children = const []]) : super(name);
+  FolderNode(String name, this.children) : super(name);
   final List<StorageNode> children;
   bool opened = false;
 }

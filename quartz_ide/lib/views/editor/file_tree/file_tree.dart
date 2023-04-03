@@ -21,12 +21,18 @@ class _FileTreeState extends State<FileTree> {
   final List<StorageNode> _fileTree = [
     FolderNode('Sugoma', [
       FolderNode('hello', [
-        FolderNode('bye', [FolderNode('hi')])
+        FolderNode('bye', [FolderNode('hi', [])])
       ]),
       FileNode('hi')
     ]),
-    FolderNode('Hello', [FolderNode('sus')]),
+    FolderNode('Hello', [FolderNode('sus', [])]),
   ];
+
+  void deleteNode(StorageNode node, List<StorageNode> curSection) {
+    setState(() {
+      curSection.remove(node);
+    });
+  }
 
   void buildTree(
     List<Widget> treeWidget,
@@ -40,6 +46,21 @@ class _FileTreeState extends State<FileTree> {
             item,
             depth,
             (value) => setState(() => item.opened = !item.opened),
+            () => deleteNode(item, fileTree),
+            () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return NewFileDialog(
+                    (fileName, fileType) => addToTree(
+                      fileName,
+                      fileType,
+                      item,
+                    ),
+                  );
+                },
+              );
+            },
           ),
         );
         if (item.opened) {
@@ -50,18 +71,47 @@ class _FileTreeState extends State<FileTree> {
           FileChip(
             item,
             depth,
+            () => deleteNode(item, fileTree),
           ),
         );
       }
     }
   }
 
-  void addToTree(String fileName, FileType fileType) {
-    StorageNode newNode =
-        fileType == FileType.folder ? FolderNode(fileName) : FileNode(fileName);
-    setState(() {
-      _fileTree.add(newNode);
-    });
+  void addToTree(String fileName, FileType fileType, FolderNode? nodeToAddTo) {
+    StorageNode newNode = fileType == FileType.folder
+        ? FolderNode(fileName, [])
+        : FileNode(fileName);
+    if (nodeToAddTo != null) {
+      setState(() {
+        _recursiveAdd(_fileTree, nodeToAddTo, newNode);
+      });
+    } else {
+      setState(() {
+        _fileTree.add(newNode);
+      });
+    }
+  }
+
+  bool _recursiveAdd(
+    List<StorageNode> curTree,
+    FolderNode nodeToAddTo,
+    StorageNode nodeToAdd,
+  ) {
+    bool isInDir = false;
+    for (var item in curTree) {
+      if (item is FolderNode) {
+        if (item == nodeToAddTo) {
+          nodeToAddTo.opened = true;
+          nodeToAddTo.children.add(nodeToAdd);
+          return true;
+        } else {
+          item.opened = _recursiveAdd(item.children, nodeToAddTo, nodeToAdd);
+          isInDir = item.opened ? true : isInDir;
+        }
+      }
+    }
+    return isInDir;
   }
 
   @override
@@ -80,10 +130,17 @@ class _FileTreeState extends State<FileTree> {
           ),
           onPressed: () {
             showDialog(
-                context: context,
-                builder: (context) {
-                  return NewFileDialog(addToTree);
-                });
+              context: context,
+              builder: (context) {
+                return NewFileDialog(
+                  (fileName, fileType) => addToTree(
+                    fileName,
+                    fileType,
+                    null,
+                  ),
+                );
+              },
+            );
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
