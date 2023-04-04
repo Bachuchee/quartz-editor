@@ -45,7 +45,6 @@ class _FileChipState extends ConsumerState<FileChip> {
                 PopupMenuItem(
                   onTap: widget.onDelete,
                   child: Row(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Icon(
                         Icons.delete,
@@ -63,7 +62,13 @@ class _FileChipState extends ConsumerState<FileChip> {
               ],
             ),
             child: FilterChip(
-              label: Text(widget.file.name),
+              label: Text(
+                widget.file.name,
+                style: const TextStyle(
+                  overflow: TextOverflow.ellipsis,
+                ),
+                maxLines: 1,
+              ),
               showCheckmark: false,
               selected: curFile == widget.file,
               onSelected: (isSelected) {

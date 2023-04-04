@@ -120,53 +120,63 @@ class _FileTreeState extends State<FileTree> {
 
     buildTree(fileTreeWidget, _fileTree, 0);
 
-    fileTreeWidget.add(
-      Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: ElevatedButton(
-          style: ElevatedButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.onPrimary,
-            foregroundColor: Theme.of(context).colorScheme.primary,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: MediaQuery.of(context).size.height - 50.0,
           ),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return NewFileDialog(
-                  (fileName, fileType) => addToTree(
-                    fileName,
-                    fileType,
-                    null,
-                  ),
-                );
-              },
-            );
-          },
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
-              Icon(Icons.add),
-              Text(
-                "New",
-                textAlign: TextAlign.center,
+          child: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: ConstrainedBox(
+              constraints: const BoxConstraints(minWidth: 160.0),
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                primary: true,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: fileTreeWidget,
+                ),
               ),
-            ],
+            ),
           ),
         ),
-      ),
-    );
-
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      primary: true,
-      child: SizedBox(
-        width: 200.0,
-        child: ListView(
+        Padding(
           padding: const EdgeInsets.all(8.0),
-          children: fileTreeWidget,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.onPrimary,
+              foregroundColor: Theme.of(context).colorScheme.primary,
+            ),
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return NewFileDialog(
+                    (fileName, fileType) => addToTree(
+                      fileName,
+                      fileType,
+                      null,
+                    ),
+                  );
+                },
+              );
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: const [
+                Icon(Icons.add),
+                Text(
+                  "New",
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+          ),
         ),
-      ),
+      ],
     );
   }
 }
