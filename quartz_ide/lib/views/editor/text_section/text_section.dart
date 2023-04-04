@@ -209,10 +209,7 @@ class _TextSectionState extends State<TextSection> {
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Expanded(
-              flex: 2,
-              child: TextLines(_lineAmount, _curLine),
-            ),
+            SizedBox(width: 50.0, child: TextLines(_lineAmount, _curLine)),
             const SizedBox(width: 2.0),
             Expanded(
               flex: 48,
