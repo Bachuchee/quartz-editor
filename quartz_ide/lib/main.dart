@@ -18,6 +18,14 @@ class MyApp extends StatelessWidget {
       title: 'Quartz',
       theme: ThemeData(
         colorScheme: darkColorScheme,
+        tooltipTheme: TooltipThemeData(
+          decoration: BoxDecoration(
+            color: darkColorScheme.surface,
+          ),
+          textStyle: TextStyle(
+            color: darkColorScheme.onSurface,
+          ),
+        ),
         fontFamily: 'Sen',
         useMaterial3: true,
       ),

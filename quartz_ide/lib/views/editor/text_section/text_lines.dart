@@ -30,7 +30,7 @@ class _TextLinesState extends State<TextLines> {
               color: Theme.of(context)
                   .colorScheme
                   .primary
-                  .withOpacity(widget.curLine == curLine ? 1.0 : 0.6),
+                  .withOpacity(widget.curLine == curLine ? 1.0 : 0.3),
             ),
             overflow: TextOverflow.ellipsis,
             maxLines: 1,
