@@ -39,7 +39,9 @@ class _AppBarState extends ConsumerState<QuartzAppBar>
 
     return AppBar(
       leading: IconButton(
-        tooltip: fileTreeState ? "Close file tree" : "Open file tree",
+        tooltip: fileTreeState
+            ? "Close file tree (Ctrl+Q)"
+            : "Open file tree (Ctrl+Q)",
         icon: AnimatedIcon(
           icon: AnimatedIcons.close_menu,
           progress: fileTreeState
