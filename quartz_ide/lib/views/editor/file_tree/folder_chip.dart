@@ -41,6 +41,7 @@ class _FolderChipState extends State<FolderChip> {
                   Radius.circular(16.0),
                 ),
               ),
+              color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
               position: RelativeRect.fromLTRB(
                 details.globalPosition.dx,
                 details.globalPosition.dy,
@@ -50,7 +51,8 @@ class _FolderChipState extends State<FolderChip> {
               items: [
                 PopupMenuItem(
                   onTap: () {
-                    Future.delayed(Duration(seconds: 0), () => widget.onNew());
+                    Future.delayed(
+                        const Duration(seconds: 0), () => widget.onNew());
                   },
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
@@ -60,7 +62,9 @@ class _FolderChipState extends State<FolderChip> {
                     ],
                   ),
                 ),
-                PopupMenuDivider() as PopupMenuEntry,
+                PopupMenuDivider(
+                  height: 0.0,
+                ) as PopupMenuEntry,
                 PopupMenuItem(
                   onTap: widget.onDelete,
                   child: Row(

@@ -35,6 +35,7 @@ class _FileChipState extends ConsumerState<FileChip> {
                   Radius.circular(16.0),
                 ),
               ),
+              color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
               position: RelativeRect.fromLTRB(
                 details.globalPosition.dx,
                 details.globalPosition.dy,
