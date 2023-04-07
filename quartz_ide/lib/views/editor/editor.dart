@@ -5,9 +5,11 @@ import 'package:quartz_ide/views/editor/file_tree/file_tree.dart';
 import 'package:quartz_ide/views/editor/text_section/text_section.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../logic/actions/toggle_file_tree.dart';
+import '../../logic/file_node.dart';
 import 'app_bar/app_bar.dart';
 
 final fileTreeStateProvider = StateProvider<bool>((ref) => true);
+final textContentProvider = StateProvider<String>((_) => "");
 
 class Editor extends ConsumerStatefulWidget {
   const Editor({super.key});
@@ -22,6 +24,16 @@ class _EditorDemoState extends ConsumerState<Editor> {
     super.initState();
     document.onContextMenu.listen((event) => event.preventDefault());
   }
+
+  final List<StorageNode> _fileTree = [
+    FolderNode('Sugoma', [
+      FolderNode('hello', [
+        FolderNode('bye', [FolderNode('hi', [])])
+      ]),
+      FileNode('hi', 'int main()\n{\nreturn 0;\n}\n')
+    ]),
+    FolderNode('Hello', [FolderNode('sus', [])]),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +57,7 @@ class _EditorDemoState extends ConsumerState<Editor> {
                     flex: 2,
                     child: Container(
                       color: Theme.of(context).colorScheme.surface,
-                      child: const FileTree(),
+                      child: FileTree(_fileTree),
                     ),
                   ),
                 if (fileTreeState)
