@@ -4,6 +4,8 @@ import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quartz_ide/views/editor/editor.dart';
 
+import 'control_bar.dart';
+
 class QuartzAppBar extends ConsumerStatefulWidget
     implements PreferredSizeWidget {
   const QuartzAppBar({super.key})
@@ -56,23 +58,7 @@ class _AppBarState extends ConsumerState<QuartzAppBar>
         },
       ),
       centerTitle: true,
-      title: SizedBox(
-        height: 40.0,
-        width: 400.0,
-        child: TextField(
-          decoration: InputDecoration(
-            hintText: 'Choose a file to edit...',
-            prefixIcon: Icon(
-              Icons.search,
-              color: Theme.of(context).colorScheme.primary,
-              size: 20.0,
-            ),
-            border: const OutlineInputBorder(),
-          ),
-          textAlign: TextAlign.start,
-          textAlignVertical: TextAlignVertical.bottom,
-        ),
-      ),
+      title: const ControlBar(),
       actions: [
         IconButton(
           onPressed: () {},

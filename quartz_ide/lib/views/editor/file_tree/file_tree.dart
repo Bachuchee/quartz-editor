@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quartz_ide/logic/file_notifier.dart';
 import 'package:quartz_ide/views/editor/file_tree/file_chip.dart';
 import 'package:quartz_ide/views/editor/file_tree/folder_chip.dart';
 import 'package:quartz_ide/views/editor/file_tree/new_file_dialog.dart';
@@ -8,7 +10,9 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../../logic/file_node.dart';
 
-final curFileProvider = StateProvider<FileNode?>((ref) => null);
+final curFileProvider = ChangeNotifierProvider<CurFileNotifier>(
+  (ref) => CurFileNotifier(),
+);
 
 class FileTree extends StatefulWidget {
   const FileTree(this.fileTree, {super.key});

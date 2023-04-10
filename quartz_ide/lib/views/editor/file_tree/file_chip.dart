@@ -22,7 +22,7 @@ class FileChip extends ConsumerStatefulWidget {
 class _FileChipState extends ConsumerState<FileChip> {
   @override
   Widget build(BuildContext context) {
-    FileNode? curFile = ref.watch(curFileProvider);
+    FileNode? curFile = ref.watch(curFileProvider).curFile;
 
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -76,11 +76,11 @@ class _FileChipState extends ConsumerState<FileChip> {
               selected: curFile == widget.file,
               onSelected: (isSelected) {
                 if (isSelected) {
-                  ref.read(curFileProvider.notifier).state = widget.file;
+                  ref.read(curFileProvider.notifier).curFile = widget.file;
                   ref.read(textContentProvider.notifier).state =
                       widget.file.content;
                 } else {
-                  ref.read(curFileProvider.notifier).state = null;
+                  ref.read(curFileProvider.notifier).curFile = null;
                 }
               },
               avatar: Icon(

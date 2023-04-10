@@ -1,6 +1,7 @@
 import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:quartz_ide/logic/actions/save_file.dart';
 import 'package:quartz_ide/views/editor/file_tree/file_tree.dart';
 import 'package:quartz_ide/views/editor/text_section/text_section.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -42,10 +43,15 @@ class _EditorDemoState extends ConsumerState<Editor> {
     return Shortcuts(
       shortcuts: {
         LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyQ):
-            ToggleFileTreeIntent(ref)
+            ToggleFileTreeIntent(ref),
+        LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyS):
+            SaveFileIntent(ref),
       },
       child: Actions(
-        actions: {ToggleFileTreeIntent: ToggleFileTreeAction()},
+        actions: {
+          ToggleFileTreeIntent: ToggleFileTreeAction(),
+          SaveFileIntent: SaveFileAction(),
+        },
         child: FocusScope(
           autofocus: true,
           child: Scaffold(
