@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quartz_ide/logic/compile_service.dart';
 import 'package:quartz_ide/views/editor/editor.dart';
+import 'package:quartz_ide/views/editor/output_window/output_window.dart';
 
+import '../file_tree/file_tree.dart';
 import 'control_bar.dart';
 
 class QuartzAppBar extends ConsumerStatefulWidget
@@ -38,6 +41,7 @@ class _AppBarState extends ConsumerState<QuartzAppBar>
   @override
   Widget build(BuildContext context) {
     final fileTreeState = ref.watch(fileTreeStateProvider);
+    final curFile = ref.watch(curFileProvider).curFile;
 
     return AppBar(
       leading: IconButton(
@@ -61,7 +65,15 @@ class _AppBarState extends ConsumerState<QuartzAppBar>
       title: const ControlBar(),
       actions: [
         IconButton(
-          onPressed: () {},
+          onPressed: curFile != null
+              ? () {
+                  CompilerService.compile(ref.read(textContentProvider)).then(
+                    (value) =>
+                        ref.read(compileResultProvider.notifier).state = value,
+                  );
+                  ref.read(outputWindowStateProvider.notifier).state = true;
+                }
+              : null,
           padding: const EdgeInsets.all(4.0),
           tooltip: 'Run',
           icon: const Icon(Icons.play_arrow),

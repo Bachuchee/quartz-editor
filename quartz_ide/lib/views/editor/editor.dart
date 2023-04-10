@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:quartz_ide/logic/actions/save_file.dart';
 import 'package:quartz_ide/views/editor/file_tree/file_tree.dart';
+import 'package:quartz_ide/views/editor/output_window/output_window.dart';
 import 'package:quartz_ide/views/editor/text_section/text_section.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../logic/actions/toggle_file_tree.dart';
@@ -10,6 +11,7 @@ import '../../logic/file_node.dart';
 import 'app_bar/app_bar.dart';
 
 final fileTreeStateProvider = StateProvider<bool>((ref) => true);
+final outputWindowStateProvider = StateProvider<bool>((_) => false);
 final textContentProvider = StateProvider<String>((_) => "");
 
 class Editor extends ConsumerStatefulWidget {
@@ -39,6 +41,7 @@ class _EditorDemoState extends ConsumerState<Editor> {
   @override
   Widget build(BuildContext context) {
     final fileTreeState = ref.watch(fileTreeStateProvider);
+    final outputWindowState = ref.watch(outputWindowStateProvider);
 
     return Shortcuts(
       shortcuts: {
@@ -71,9 +74,22 @@ class _EditorDemoState extends ConsumerState<Editor> {
                     width: 0.0,
                     color: Theme.of(context).colorScheme.primary,
                   ),
-                const Expanded(
+                Expanded(
                   flex: 18,
-                  child: TextSection(),
+                  child: Stack(
+                    children: [
+                      const TextSection(),
+                      if (outputWindowState)
+                        Align(
+                          alignment: Alignment.bottomCenter,
+                          child: OutputWindow(
+                            onClose: () => ref
+                                .read(outputWindowStateProvider.notifier)
+                                .state = false,
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
               ],
             ),

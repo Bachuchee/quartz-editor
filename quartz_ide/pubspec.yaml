@@ -41,6 +41,7 @@ dependencies:
   rich_text_controller: ^1.4.2
   ffi: ^2.0.1
   flutter_riverpod: ^2.3.2
+  http: ^0.13.5
 
 dev_dependencies:
   flutter_test:
@@ -90,6 +91,9 @@ flutter:
           weight: 700
         - asset: assets/fonts/Sen-ExtraBold.ttf
           weight: 900
+    - family: ModeNine
+      fonts:
+        - asset: assets/fonts/Modenine.ttf
   #   - family: Trajan Pro
   #     fonts:
   #       - asset: fonts/TrajanPro.ttf
