@@ -3,7 +3,9 @@ import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quartz_ide/views/editor/file_tree/file_tree.dart';
+import 'package:quartz_ide/views/editor/text_section/text_section.dart';
 import '../../../logic/file_node.dart';
+import '../editor.dart';
 
 class FileChip extends ConsumerStatefulWidget {
   const FileChip(this.file, this.depth, this.onDelete, {super.key});
@@ -20,7 +22,7 @@ class FileChip extends ConsumerStatefulWidget {
 class _FileChipState extends ConsumerState<FileChip> {
   @override
   Widget build(BuildContext context) {
-    FileNode? curFile = ref.watch(curFileProvider);
+    FileNode? curFile = ref.watch(curFileProvider).curFile;
 
     return Padding(
       padding: const EdgeInsets.all(4.0),
@@ -74,9 +76,11 @@ class _FileChipState extends ConsumerState<FileChip> {
               selected: curFile == widget.file,
               onSelected: (isSelected) {
                 if (isSelected) {
-                  ref.read(curFileProvider.notifier).state = widget.file;
+                  ref.read(curFileProvider.notifier).curFile = widget.file;
+                  ref.read(textContentProvider.notifier).state =
+                      widget.file.content;
                 } else {
-                  ref.read(curFileProvider.notifier).state = null;
+                  ref.read(curFileProvider.notifier).curFile = null;
                 }
               },
               avatar: Icon(

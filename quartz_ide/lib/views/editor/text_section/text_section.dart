@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:quartz_ide/theme/color_scheme.dart';
 import 'package:rich_text_controller/rich_text_controller.dart';
 
+import '../editor.dart';
 import 'text_lines.dart';
 
-// for tabs
+final lineAmountProvider = StateProvider<int>((ref) {
+  final curText = ref.watch(textContentProvider);
+  int length = curText.split('\n').length;
+  return length > 0 ? length : 1;
+});
+
+// * for tabs
 
 class InsertTabIntent extends Intent {
   const InsertTabIntent(this.numSpaces, this.textController);
@@ -41,17 +49,16 @@ class InsertTabAction extends Action {
   }
 }
 
-class TextSection extends StatefulWidget {
+class TextSection extends ConsumerStatefulWidget {
   const TextSection({super.key});
 
   @override
-  State<TextSection> createState() => _TextSectionState();
+  ConsumerState<TextSection> createState() => _TextSectionState();
 }
 
-class _TextSectionState extends State<TextSection> {
+class _TextSectionState extends ConsumerState<TextSection> {
   late RichTextController _controller;
-  String _lastText = "";
-  int _lineAmount = 1;
+  String _validationText = "";
   int _curLine = 0;
 
   @override
@@ -144,11 +151,12 @@ class _TextSectionState extends State<TextSection> {
 
   void onChange() {
     int position = _controller.selection.baseOffset;
+    String lastText = ref.read(textContentProvider);
     try {
       String firstPart = _controller.text.substring(0, position);
       String secondPart = _controller.text.substring(position);
       String lastChar = _controller.text[position - 1];
-      if (_controller.text.length > _lastText.length ||
+      if (_controller.text.length > lastText.length ||
           _controller.text.isEmpty) {
         switch (lastChar) {
           case "'":
@@ -188,28 +196,34 @@ class _TextSectionState extends State<TextSection> {
         }
       }
     } catch (e) {}
-    _lastText = _controller.text;
     int curLine = 0;
-    for (int i = 0; i < _lastText.length; i++) {
-      if (position > i && _lastText[i] == '\n') {
+    for (int i = 0; i < _controller.text.length; i++) {
+      if (position > i && _controller.text[i] == '\n') {
         curLine++;
       }
     }
 
     setState(() {
-      _lineAmount = _lastText.split('\n').length;
       _curLine = curLine;
+      _validationText = _controller.text;
     });
+    ref.read(textContentProvider.notifier).state = _controller.text;
   }
 
   @override
   Widget build(BuildContext context) {
+    final currentText = ref.watch(textContentProvider);
+
+    if (currentText != _validationText) {
+      _controller.text = currentText;
+    }
+
     return SizedBox.expand(
       child: SingleChildScrollView(
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(width: 50.0, child: TextLines(_lineAmount, _curLine)),
+            SizedBox(width: 50.0, child: TextLines(_curLine)),
             const SizedBox(width: 2.0),
             Expanded(
               flex: 48,

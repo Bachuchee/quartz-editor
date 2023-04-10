@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter/src/widgets/placeholder.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:quartz_ide/logic/file_notifier.dart';
 import 'package:quartz_ide/views/editor/file_tree/file_chip.dart';
 import 'package:quartz_ide/views/editor/file_tree/folder_chip.dart';
 import 'package:quartz_ide/views/editor/file_tree/new_file_dialog.dart';
@@ -8,26 +10,20 @@ import 'package:riverpod/riverpod.dart';
 
 import '../../../logic/file_node.dart';
 
-final curFileProvider = StateProvider<FileNode?>((ref) => null);
+final curFileProvider = ChangeNotifierProvider<CurFileNotifier>(
+  (ref) => CurFileNotifier(),
+);
 
 class FileTree extends StatefulWidget {
-  const FileTree({super.key});
+  const FileTree(this.fileTree, {super.key});
+
+  final List<StorageNode> fileTree;
 
   @override
   State<FileTree> createState() => _FileTreeState();
 }
 
 class _FileTreeState extends State<FileTree> {
-  final List<StorageNode> _fileTree = [
-    FolderNode('Sugoma', [
-      FolderNode('hello', [
-        FolderNode('bye', [FolderNode('hi', [])])
-      ]),
-      FileNode('hi')
-    ]),
-    FolderNode('Hello', [FolderNode('sus', [])]),
-  ];
-
   void deleteNode(StorageNode node, List<StorageNode> curSection) {
     setState(() {
       curSection.remove(node);
@@ -84,11 +80,11 @@ class _FileTreeState extends State<FileTree> {
         : FileNode(fileName);
     if (nodeToAddTo != null) {
       setState(() {
-        _recursiveAdd(_fileTree, nodeToAddTo, newNode);
+        _recursiveAdd(widget.fileTree, nodeToAddTo, newNode);
       });
     } else {
       setState(() {
-        _fileTree.add(newNode);
+        widget.fileTree.add(newNode);
       });
     }
   }
@@ -118,7 +114,7 @@ class _FileTreeState extends State<FileTree> {
   Widget build(BuildContext context) {
     List<Widget> fileTreeWidget = [];
 
-    buildTree(fileTreeWidget, _fileTree, 0);
+    buildTree(fileTreeWidget, widget.fileTree, 0);
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
