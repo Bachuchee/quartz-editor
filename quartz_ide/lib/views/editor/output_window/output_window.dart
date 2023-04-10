@@ -41,6 +41,7 @@ class _OutputWindowState extends ConsumerState<OutputWindow> {
                 ),
               ),
               IconButton(
+                tooltip: "Close window (Ctrl+C)",
                 onPressed: widget.onClose,
                 icon: const Icon(Icons.close),
               ),

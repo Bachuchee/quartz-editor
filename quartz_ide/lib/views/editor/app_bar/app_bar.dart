@@ -75,7 +75,7 @@ class _AppBarState extends ConsumerState<QuartzAppBar>
                 }
               : null,
           padding: const EdgeInsets.all(4.0),
-          tooltip: 'Run',
+          tooltip: 'Run (Ctrl+R)',
           icon: const Icon(Icons.play_arrow),
           color: Colors.green,
         ),
