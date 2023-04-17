@@ -5,6 +5,7 @@ import 'package:quartz_ide/logic/actions/close_window.dart';
 import 'package:quartz_ide/logic/actions/run_code.dart';
 import 'package:quartz_ide/logic/actions/save_file.dart';
 import 'package:quartz_ide/views/editor/file_tree/file_tree.dart';
+import 'package:quartz_ide/views/editor/no_file_selected/no_file_page.dart';
 import 'package:quartz_ide/views/editor/output_window/output_window.dart';
 import 'package:quartz_ide/views/editor/text_section/text_section.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,6 +37,7 @@ class _EditorDemoState extends ConsumerState<Editor> {
   Widget build(BuildContext context) {
     final fileTreeState = ref.watch(fileTreeStateProvider);
     final outputWindowState = ref.watch(outputWindowStateProvider);
+    final curFile = ref.watch(curFileProvider).curFile;
 
     return Shortcuts(
       shortcuts: {
@@ -78,7 +80,10 @@ class _EditorDemoState extends ConsumerState<Editor> {
                   flex: 18,
                   child: Stack(
                     children: [
-                      const TextSection(),
+                      if (curFile != null)
+                        const TextSection()
+                      else
+                        const NoFilePage(),
                       if (outputWindowState)
                         Align(
                           alignment: Alignment.bottomCenter,

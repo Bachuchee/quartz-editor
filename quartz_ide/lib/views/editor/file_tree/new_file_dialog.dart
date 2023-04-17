@@ -61,7 +61,7 @@ class _NewFileDialogState extends State<NewFileDialog> {
                         label: Text("Name"),
                         border: OutlineInputBorder(),
                       ),
-                      onChanged: (name) => _fileName = name,
+                      onChanged: (name) => setState(() => _fileName = name),
                     ),
                   ),
                 ),

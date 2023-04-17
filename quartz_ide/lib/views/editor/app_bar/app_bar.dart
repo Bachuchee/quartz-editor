@@ -79,48 +79,6 @@ class _AppBarState extends ConsumerState<QuartzAppBar>
           icon: const Icon(Icons.play_arrow),
           color: Colors.green,
         ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(1.0, 1.0, 8.0, 1.0),
-          child: PopupMenuButton(
-            color: Theme.of(context).colorScheme.surface.withOpacity(0.7),
-            shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(
-                Radius.circular(16.0),
-              ),
-            ),
-            itemBuilder: (context) => [
-              PopupMenuItem(
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.logout,
-                      color: Theme.of(context).colorScheme.error,
-                    ),
-                    Text(
-                      'Logout',
-                      style: TextStyle(
-                        color: Theme.of(context).colorScheme.error,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-            child: Container(
-              width: 30.0,
-              height: 30.0,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(
-                    'assets/images/amogboy.jpeg',
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ),
       ],
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
